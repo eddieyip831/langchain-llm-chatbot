@@ -1,0 +1,58 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.1, pytest-8.3.4, pluggy-1.5.0
+rootdir: /Users/eddie/Python/langchain-llm-chatbot
+plugins: anyio-4.7.0
+collected 4 items
+
+tests/test_chatbot.py ..F.                                               [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_chatbot_memory ______________________________
+
+    def test_chatbot_memory():
+        """
+        Tests whether the ChatBot retains context across multiple conversation turns.
+        """
+        chatbot = ChatBot(memory_size=3)  # Limit memory size for testing
+    
+        # First interaction: introducing a name
+        response_1 = chatbot.get_response("My name is John.")
+        assert "John" in response_1 or len(response_1) > 0, "The bot should acknowledge the name"
+    
+        # Second interaction: checking if the bot remembers the name
+        response_2 = chatbot.get_response("What is my name?")
+>       assert "John" in response_2, "The bot should remember the name from previous interaction"
+E       AssertionError: The bot should remember the name from previous interaction
+E       assert 'John' in "I'm sorry, but as an AI assistant, I do not have access to your personal information such as your name. How can I assist you today?"
+
+tests/test_chatbot.py:44: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  langsmith.client:client.py:1813 Failed to multipart ingest runs: langsmith.utils.LangSmithError: Failed to POST https://api.smith.langchain.com/runs/multipart in LangSmith API. HTTPError('403 Client Error: Forbidden for url: https://api.smith.langchain.com/runs/multipart', '{"detail":"Forbidden"}')
+WARNING  langsmith.client:client.py:1813 Failed to multipart ingest runs: langsmith.utils.LangSmithError: Failed to POST https://api.smith.langchain.com/runs/multipart in LangSmith API. HTTPError('403 Client Error: Forbidden for url: https://api.smith.langchain.com/runs/multipart', '{"detail":"Forbidden"}')
+WARNING  langsmith.client:client.py:1813 Failed to multipart ingest runs: langsmith.utils.LangSmithError: Failed to POST https://api.smith.langchain.com/runs/multipart in LangSmith API. HTTPError('403 Client Error: Forbidden for url: https://api.smith.langchain.com/runs/multipart', '{"detail":"Forbidden"}')
+=============================== warnings summary ===============================
+venv/lib/python3.13/site-packages/pydantic/v1/typing.py:68: 16 warnings
+  /Users/eddie/Python/langchain-llm-chatbot/venv/lib/python3.13/site-packages/pydantic/v1/typing.py:68: DeprecationWarning: Failing to pass a value to the 'type_params' parameter of 'typing.ForwardRef._evaluate' is deprecated, as it leads to incorrect behaviour when calling typing.ForwardRef._evaluate on a stringified annotation that references a PEP 695 type parameter. It will be disallowed in Python 3.15.
+    return cast(Any, type_)._evaluate(globalns, localns, recursive_guard=set())
+
+tests/test_chatbot.py::test_chatbot_response
+  /Users/eddie/Python/langchain-llm-chatbot/src/chatbot/main.py:18: LangChainDeprecationWarning: The class `ChatOpenAI` was deprecated in LangChain 0.0.10 and will be removed in 1.0. An updated version of the class exists in the :class:`~langchain-openai package and should be used instead. To use it run `pip install -U :class:`~langchain-openai` and import as `from :class:`~langchain_openai import ChatOpenAI``.
+    self.model = ChatOpenAI(
+
+tests/test_chatbot.py::test_chatbot_response
+  /Users/eddie/Python/langchain-llm-chatbot/src/chatbot/memory.py:13: LangChainDeprecationWarning: Please see the migration guide at: https://python.langchain.com/docs/versions/migrating_memory/
+    return ConversationBufferMemory(limit=size)
+
+tests/test_chatbot.py::test_chatbot_response
+tests/test_chatbot.py::test_chatbot_memory
+tests/test_chatbot.py::test_chatbot_memory
+tests/test_chatbot.py::test_chatbot_memory_limit
+tests/test_chatbot.py::test_chatbot_memory_limit
+tests/test_chatbot.py::test_chatbot_memory_limit
+  /Users/eddie/Python/langchain-llm-chatbot/venv/lib/python3.13/site-packages/langchain_community/chat_models/openai.py:495: PydanticDeprecatedSince20: The `dict` method is deprecated; use `model_dump` instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.10/migration/
+    response = response.dict()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_chatbot.py::test_chatbot_memory - AssertionError: The bot s...
+=================== 1 failed, 3 passed, 24 warnings in 4.55s ===================
